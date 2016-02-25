@@ -23,6 +23,7 @@
  */
 package libSB.persistence.preferenceBased;
 
+import java.util.Objects;
 import java.util.prefs.Preferences;
 import libSB.persistence.LoadVisitor;
 import libSB.persistence.Loadable;
@@ -36,12 +37,15 @@ import libSB.persistence.Saveable;
  */
 public class PreferenceBasedPersistanceManager implements PersistenceManager {
 
+    private static final char NODE_SEPERATOR = '/';
+    
     private final Preferences preferences;
 
     private final SaveVisitor saveVisitor;
     private final LoadVisitor loadVisitor;
 
     public PreferenceBasedPersistanceManager(String applicationName) {
+        Objects.requireNonNull(applicationName);
 	final Preferences appLocal = Preferences.userRoot();
 	this.preferences = appLocal.node(applicationName);
 	this.saveVisitor = new PreferenceSaveVisitor(this.preferences);
@@ -49,8 +53,10 @@ public class PreferenceBasedPersistanceManager implements PersistenceManager {
     }
 
     public PreferenceBasedPersistanceManager(String applicationName, String subModule) {
+        Objects.requireNonNull(applicationName);
+        Objects.requireNonNull(subModule);
 	final Preferences appLocal = Preferences.userRoot();
-	this.preferences = appLocal.node(applicationName + '/' + subModule);
+	this.preferences = appLocal.node(applicationName + NODE_SEPERATOR + subModule);
 	this.saveVisitor = new PreferenceSaveVisitor(this.preferences);
 	this.loadVisitor = new PreferenceLoadVisitor(this.preferences);
     }

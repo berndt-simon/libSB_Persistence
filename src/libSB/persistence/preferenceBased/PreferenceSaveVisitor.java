@@ -23,6 +23,7 @@
  */
 package libSB.persistence.preferenceBased;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -45,6 +46,7 @@ class PreferenceSaveVisitor implements SaveVisitor {
 
     @Override
     public <T> void persistSingle(String key, Supplier<? extends T> value, Function<T, byte[]> typeConverter) {
+        Objects.requireNonNull(typeConverter);
 	if (key != null) {
 	    final byte[] bytes = typeConverter.apply(value.get());
 	    if (bytes != null) {
@@ -57,6 +59,7 @@ class PreferenceSaveVisitor implements SaveVisitor {
 
     @Override
     public void persistNested(String key, Stream<? extends Consumer<? super SaveVisitor>> values) {
+        Objects.requireNonNull(values);
 	if (key == null || key.isEmpty() || key.charAt(0) == '/') {
 	    throw new IllegalArgumentException();
 	}

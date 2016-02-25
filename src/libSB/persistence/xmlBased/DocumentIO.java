@@ -49,43 +49,41 @@ import org.xml.sax.SAXException;
  * @author Simon Berndt
  */
 public class DocumentIO {
-    
+
     private static final Logger LOG = Logger.getLogger(DocumentIO.class.getName());
 
     private final Transformer xmlOutputTransformer;
     private final DocumentBuilder documentBuilder;
 
     public DocumentIO() {
-	try {
-		this.xmlOutputTransformer = TransformerFactory.newInstance().newTransformer();
-		this.xmlOutputTransformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-		this.xmlOutputTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        try {
+            this.xmlOutputTransformer = TransformerFactory.newInstance().newTransformer();
+            this.xmlOutputTransformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            this.xmlOutputTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
-		this.documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-	} catch (ParserConfigurationException | TransformerConfigurationException ex) {
-	    throw new RuntimeException(ex);
-	}
+            this.documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        } catch (ParserConfigurationException | TransformerConfigurationException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public Document loadDocumentFromXML(Path sourcePath) throws IOException {
-	try (InputStream inputStream = Files.newInputStream(sourcePath, StandardOpenOption.READ)) {
-	    return this.documentBuilder.parse(inputStream);
-	} catch (final SAXException ex) {
-	    throw new IOException(ex);
-	}
+        try (InputStream inputStream = Files.newInputStream(sourcePath, StandardOpenOption.READ)) {
+            return this.documentBuilder.parse(inputStream);
+        } catch (final SAXException ex) {
+            throw new IOException(ex);
+        }
     }
 
     public void writeDocumentToXML(Document xmlDoc, Path destinationPath) throws IOException {
-	try {
-	    Files.createDirectories(destinationPath.getParent());
-	    try (Writer fileWriter = Files.newBufferedWriter(destinationPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)) {
-		    this.xmlOutputTransformer.transform(new DOMSource(xmlDoc), new StreamResult(fileWriter));
-	    } catch (final IOException e) {
-		LOG.log(Level.SEVERE, null, e);
-	    }
-	} catch (TransformerException | IOException ex) {
-	    LOG.log(Level.SEVERE, null, ex);
-	}
+        try {
+            Files.createDirectories(destinationPath.getParent());
+            try (Writer fileWriter = Files.newBufferedWriter(destinationPath, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING)) {
+                this.xmlOutputTransformer.transform(new DOMSource(xmlDoc), new StreamResult(fileWriter));
+            }
+        } catch (TransformerException | IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
     }
 
 }

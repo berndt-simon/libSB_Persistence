@@ -31,12 +31,12 @@ import java.nio.charset.StandardCharsets;
  * @author Simon Berndt
  */
 final public class StandardByteConverters {
-
+    
     private StandardByteConverters() {
     }
 
     public static byte[] byteToBytes(Byte b) {
-	if (b == null) {
+        if (b == null) {
 	    throw new IllegalArgumentException();
 	}
 	return new byte[] {b};

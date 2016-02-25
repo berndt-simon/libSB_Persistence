@@ -36,7 +36,7 @@ public interface SaveVisitor {
 
     <T> void persistSingle(String key, Supplier<? extends T> value, Function<T, byte[]> typeConverter);
     
-    default <T, E extends Enum<?>> void persistSingle(E key, Supplier<? extends T> value, Function<T, byte[]> typeConverter) {
+    default <T> void persistSingle(Enum<?> key, Supplier<? extends T> value, Function<T, byte[]> typeConverter) {
         persistSingle(key.name(), value, typeConverter);
     }
 

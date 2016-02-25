@@ -57,7 +57,7 @@ class PropertiesBase64_LoadVisitor implements LoadVisitor {
     }
 
     @Override
-    public Stream<? extends LoadVisitor> restoreNested(String key) {
+    public Stream<LoadVisitor> restoreNested(String key) {
 	throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

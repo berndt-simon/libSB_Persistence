@@ -34,10 +34,11 @@ import java.util.stream.Stream;
 public interface LoadVisitor {
 
     <T> void restoreSingle(String key, Consumer<? super T> field, Function<byte[], T> typeConverter);
-    default <T, E extends Enum<?>> void restoreSingle(E key, Consumer<? super T> field, Function<byte[], T> typeConverter) {
+
+    default <T> void restoreSingle(Enum<?> key, Consumer<? super T> field, Function<byte[], T> typeConverter) {
         restoreSingle(key.name(), field, typeConverter);
     }
 
-    Stream<? extends LoadVisitor> restoreNested(String key);
+    Stream<LoadVisitor> restoreNested(String key);
 
 }

@@ -24,6 +24,7 @@
 package libSB.persistence.preferenceBased;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -49,6 +50,7 @@ class PreferenceLoadVisitor implements LoadVisitor {
 
     @Override
     public <T> void restoreSingle(String key, Consumer<? super T> field, Function<byte[], T> typeConverter) {
+        Objects.requireNonNull(typeConverter);
 	if (key != null) {
 	    final byte[] stored = this.preferences.getByteArray(key, null);
 	    if (stored != null) {
@@ -69,8 +71,8 @@ class PreferenceLoadVisitor implements LoadVisitor {
 		    return singleSubNodeName.startsWith(key + '_');
 		}).map(multiSubNode::node).map(PreferenceLoadVisitor::new);
 	    }
-	} catch (final BackingStoreException ex) {
-	    LOG.log(Level.INFO, "w8 wut");
+	} catch (BackingStoreException ex) {
+	    LOG.log(Level.WARNING, null, ex);
 	}
 	return Stream.empty();
     }
